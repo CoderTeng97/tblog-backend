@@ -1,6 +1,8 @@
 package com.tg.blog.base.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.tg.blog.base.annotation.ControllerExceptionProcessor;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,13 +22,20 @@ import java.lang.reflect.Method;
 /**
  * @Author: TengGang
  * @Date: 2019/7/7 13:48
- * @Description:
+ * @Description: 对controller层返回成功的结果进行包装
  */
-@ControllerAdvice
+@ControllerAdvice(basePackages = {"com.tg.blog.core.controller"})
 public class GlobalResponseAdvice implements ResponseBodyAdvice{
     @Override
     public boolean supports(MethodParameter returnType, Class converterType) {
-        return true;
+        Class clazz = returnType.getContainingClass();
+        Class superClazz = clazz.getSuperclass();
+        ControllerExceptionProcessor exceptionProcessor = (ControllerExceptionProcessor) superClazz.getAnnotation(ControllerExceptionProcessor.class);
+        if(exceptionProcessor != null){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     @Override
@@ -35,8 +44,14 @@ public class GlobalResponseAdvice implements ResponseBodyAdvice{
         info.put("code", HttpStatus.OK.value());
         info.put("msg",HttpStatus.OK.getReasonPhrase());
         if (!ObjectUtils.isEmpty(body)){
-            info.put("data",body);
+            if(body instanceof  String){
+                info.put("data", body);
+                return info.toJSONString();
+            }else{
+                info.put("data",body);
+            }
+
         }
-        return info.toJSONString();
+        return info;
     }
 }

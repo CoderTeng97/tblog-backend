@@ -28,7 +28,6 @@ import java.sql.Wrapper;
 @Api(description = "文章管理Api接口")
 @RestController
 @RequestMapping("/article")
-@ControllerExceptionProcessor
 public class ArticleController extends BaseController {
     @Autowired
     ArticleService articleService;

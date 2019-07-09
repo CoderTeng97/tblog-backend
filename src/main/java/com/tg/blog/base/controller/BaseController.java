@@ -1,5 +1,6 @@
 package com.tg.blog.base.controller;
 
+import com.tg.blog.base.annotation.ControllerExceptionProcessor;
 import com.tg.blog.base.enums.ResponseMsgType;
 import com.tg.blog.base.exception.ResponseCommonException;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
  * @Date: 2019/7/6 16:35
  * @Description:
  */
+@ControllerExceptionProcessor
 public abstract class BaseController {
 
 
@@ -42,8 +44,8 @@ public abstract class BaseController {
         throw  new ResponseCommonException(msg);
     }
 
-    public Object responseFail(ResponseMsgType responseMsgType){
-        return  responseMsgType.msg();
+    public void responseFail(ResponseMsgType responseMsgType){
+        throw  new ResponseCommonException(responseMsgType.msg());
     }
 }
 

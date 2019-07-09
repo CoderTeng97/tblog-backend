@@ -8,9 +8,7 @@ import org.springframework.context.annotation.PropertySources;
 @Configuration
 @ConfigurationProperties
 @PropertySources({
-        @PropertySource("classpath:props/${user.env}/base.properties"),
-        @PropertySource("classpath:props/${user.env}/redis.properties"),
-        @PropertySource("classpath:props/${user.env}/mysql.properties")
+        @PropertySource("classpath:props/application-${user.env}.properties")
 })
 public class BootConfig {
 }
