@@ -1,5 +1,4 @@
 #TOBLOG 博客项目
-######这是我的博客项目，用户生活感悟技术类文章分析
 
 #POJO 使用规范
 BO：business object 业务对象
