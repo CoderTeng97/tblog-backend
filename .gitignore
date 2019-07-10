@@ -28,4 +28,4 @@ log
 
 
 ### props ###
-/props/
+*.properties
