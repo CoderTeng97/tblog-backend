@@ -29,3 +29,4 @@ log
 
 ### props ###
 *.properties
+../props/
