@@ -8,6 +8,7 @@ import com.tg.blog.base.enums.ResponseMsgType;
 import com.tg.blog.core.model.Article;
 import com.tg.blog.core.model.ArticleContent;
 import com.tg.blog.core.pojo.dto.ArticleReleaseDTO;
+import com.tg.blog.core.service.AliYunOSService;
 import com.tg.blog.core.service.ArticleContentService;
 import com.tg.blog.core.service.ArticleService;
 import io.swagger.annotations.Api;
@@ -17,7 +18,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.sql.Wrapper;
 
 /**
@@ -33,6 +37,8 @@ public class ArticleController extends BaseController {
     ArticleService articleService;
     @Autowired
     ArticleContentService articleContentService;
+    @Autowired
+    AliYunOSService aliYunOSService;
 
     @ApiOperation("获取文章分页列表")
     @GetMapping("/list")
@@ -95,4 +101,18 @@ public class ArticleController extends BaseController {
         articleService.releaseAndUpdateArticle(article);
         return responseOk();
     }
+
+
+    @ApiOperation("上传文章内容图片")
+    @RequestMapping(value = "/editor/upload&responseType=json" ,method = {RequestMethod.OPTIONS,RequestMethod.POST})
+    public void uploadEditorFile(@RequestParam("upload") MultipartFile file, HttpServletResponse response) {
+        System.out.println(file);
+        //        try {
+//            aliYunOSService.uploadFile("/"+file.getName(),file.getInputStream());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+    }
+
+
 }

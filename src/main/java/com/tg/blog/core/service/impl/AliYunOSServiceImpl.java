@@ -6,11 +6,13 @@ import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.common.utils.BinaryUtil;
 import com.aliyun.oss.model.MatchMode;
 import com.aliyun.oss.model.PolicyConditions;
+import com.aliyun.oss.model.PutObjectResult;
 import com.tg.blog.core.service.AliYunOSService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
@@ -65,5 +67,16 @@ public class AliYunOSServiceImpl implements AliYunOSService{
         boolean found = ossClient.doesObjectExist(bucket, dir);
         ossClient.shutdown();
         return found;
+    }
+
+    @Override
+    public void uploadFile(String objectName, InputStream stream) {
+        // 创建OSSClient实例。
+        OSSClient ossClient = new OSSClient(endPoint, accessKeyId, accessKeySecret);
+        PutObjectResult putObjectResult = ossClient.putObject(bucket, objectName, stream);
+        System.out.println(putObjectResult.getResponse());
+        System.out.println(putObjectResult.getETag());
+        // 关闭OSSClient。
+        ossClient.shutdown();
     }
 }

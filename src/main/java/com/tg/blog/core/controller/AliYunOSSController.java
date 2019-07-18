@@ -6,7 +6,6 @@ import com.tg.blog.core.service.AliYunOSService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +22,7 @@ public class AliYunOSSController extends BaseController{
     @ApiOperation("获取读写签名")
     public Object getWritePolicy() throws UnsupportedEncodingException {
         /**生成用户dir*/
-        JSONObject result =  aliYunOSService.getWritePolicy("userArticleCover");
+        JSONObject result =  aliYunOSService.getWritePolicy("userArticleCover/userid");
         return  result;
     }
 }
