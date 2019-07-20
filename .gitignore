@@ -26,7 +26,3 @@ log
 /.nb-gradle/
 /build/
 
-
-### props ###
-*.properties
-../props/
