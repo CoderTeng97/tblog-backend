@@ -20,7 +20,7 @@ public class UserController extends BaseController{
     @ApiOperation("用户登录")
     @PostMapping("/login")
     public Object login(String email,String password){
-        return responseOk();
+        return  userService.login(email,password);
     }
 
     @ApiOperation("用户注册")

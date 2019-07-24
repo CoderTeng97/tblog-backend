@@ -34,9 +34,12 @@ public class User implements Serializable {
 
     private String email;
 
+    private String userType;
+
     private LocalDateTime gmtCreate;
 
     private LocalDateTime gmtModified;
+
 
 
 }

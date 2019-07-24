@@ -26,7 +26,6 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler
     public void processExceptions(HttpServletRequest request, HttpServletResponse response, Exception e){
-
         if( e instanceof ResponseCommonException){
             info.put("code",((ResponseCommonException) e).getHttpStatus().value());
             info.put("msg",e.getMessage());
