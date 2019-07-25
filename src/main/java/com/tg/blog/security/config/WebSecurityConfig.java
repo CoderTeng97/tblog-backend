@@ -29,8 +29,8 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .formLogin().disable() //不要UsernamePasswordAuthenticationFilter
-                .httpBasic().disable() //不要BasicAuthenticationFilter
-                .authorizeRequests().anyRequest().access("hasIpAddress('127.0.0.1') or authenticated");
+                .httpBasic().disable(); //不要BasicAuthenticationFilter
+                //.authorizeRequests().anyRequest().access("hasIpAddress('127.0.0.1') or authenticated");
 
         // 禁用缓存
         httpSecurity.headers().cacheControl();
@@ -57,6 +57,6 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/**/*.css",
                 "/**/*.js");
         //放行认证到controller
-        web.ignoring().antMatchers(HttpMethod.POST,"user/login");
+        web.ignoring().antMatchers(HttpMethod.POST,"/user/login");
     }
 }

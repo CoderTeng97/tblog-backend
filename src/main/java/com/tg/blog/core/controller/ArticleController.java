@@ -2,18 +2,21 @@ package com.tg.blog.core.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.tg.blog.base.annotation.ControllerExceptionProcessor;
 import com.tg.blog.base.controller.BaseController;
 import com.tg.blog.base.enums.ResponseMsgType;
 import com.tg.blog.core.model.Article;
 import com.tg.blog.core.model.ArticleContent;
 import com.tg.blog.core.pojo.dto.ArticleReleaseDTO;
+import com.tg.blog.core.pojo.dto.ArticleUpdateDTO;
 import com.tg.blog.core.service.AliYunOSService;
 import com.tg.blog.core.service.ArticleContentService;
 import com.tg.blog.core.service.ArticleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -46,11 +49,14 @@ public class ArticleController extends BaseController {
             @ApiParam(name = "pageNum", value = "页码", defaultValue = "1")
             @RequestParam(name = "pageNum", defaultValue = "1")
                     Long pageNum,
-            @ApiParam(name = "pageNum", value = "分页大小", defaultValue = "10")
+            @ApiParam(name = "pageSize", value = "分页大小", defaultValue = "10")
             @RequestParam(name = "pageSize", defaultValue = "10")
-                    Long pageSize
+                    Long pageSize,
+            @ApiParam(name = "searchText", value = "搜索文本")
+            @RequestParam(name = "searchText", required = false)
+                    String searchText
     ) {
-        return articleService.getActiclePageList(pageNum, pageSize);
+        return articleService.getActiclePageList(pageNum, pageSize,searchText);
     }
 
 
@@ -80,7 +86,7 @@ public class ArticleController extends BaseController {
         BeanUtils.copyProperties(releaseDTO, article);
         String contentId = articleContentService.releaseAndUpdateContent(new ArticleContent(releaseDTO.getContent()));
         if (StringUtils.isEmpty(contentId)) {
-            responseFail("contentId 为空");
+            responseFail("插入失败,请稍后重试");
         }
         article.setId(contentId);
         articleService.releaseAndUpdateArticle(article);
@@ -90,16 +96,20 @@ public class ArticleController extends BaseController {
 
     @ApiOperation("更新文章")
     @PostMapping("/update")
-    public Object update(ArticleReleaseDTO releaseDTO, String articleId) {
-        if (StringUtils.isEmpty(articleId)) {
-            responseFail("articleId 不能为空");
-        }
-        Article article = new Article();
-        article.setId(articleId);
-        BeanUtils.copyProperties(releaseDTO, article);
-        articleContentService.releaseAndUpdateContent(new ArticleContent(articleId, releaseDTO.getContent()));
-        articleService.releaseAndUpdateArticle(article);
+    public Object update(ArticleUpdateDTO updateDTO) {
+        articleService.associatedUpdateArticle(updateDTO);
         return responseOk();
+    }
+
+    @ApiOperation("删除文章")
+    @PostMapping("/del")
+    public Object update(@RequestParam("articleId") String articleId) {
+        UpdateWrapper<Article> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.set(true,"is_del",1).eq("id",articleId);
+        if (!articleService.update(updateWrapper)){
+            responseFail(ResponseMsgType.FAIL);
+        }
+        return  responseOk();
     }
 
 

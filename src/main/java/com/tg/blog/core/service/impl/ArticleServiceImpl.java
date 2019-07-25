@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tg.blog.core.model.Article;
 import com.tg.blog.core.mapper.ArticleMapper;
 import com.tg.blog.core.model.ArticleContent;
+import com.tg.blog.core.pojo.dto.ArticleUpdateDTO;
 import com.tg.blog.core.pojo.vo.ArticleBaseVO;
 import com.tg.blog.core.service.ArticleContentService;
 import com.tg.blog.core.service.ArticleService;
@@ -38,7 +39,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public IPage<ArticleBaseVO> getActiclePageList(Long pageNum, Long PageSize) {
-        return baseMapper.defaultQueryArticlePageList(new Page<>(pageNum,PageSize));
+    public IPage<ArticleBaseVO> getActiclePageList(Long pageNum, Long PageSize,String searchText) {
+        return baseMapper.defaultQueryArticlePageList(searchText,new Page<>(pageNum,PageSize));
+    }
+
+    @Override
+    public boolean associatedUpdateArticle(ArticleUpdateDTO articleUpdateDTO) {
+       return baseMapper.associatedUpdateById(articleUpdateDTO) > 0 ? true  : false;
     }
 }

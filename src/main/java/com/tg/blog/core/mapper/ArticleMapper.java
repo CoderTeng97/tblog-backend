@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tg.blog.core.model.Article;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.tg.blog.core.pojo.dto.ArticleUpdateDTO;
 import com.tg.blog.core.pojo.vo.ArticleBaseVO;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -22,5 +24,7 @@ public interface ArticleMapper extends BaseMapper<Article> {
     * @Param: [page]
     * @return: com.baomidou.mybatisplus.core.metadata.IPage<com.tg.blog.core.pojo.vo.ArticleBaseVO>
     */
-    IPage<ArticleBaseVO> defaultQueryArticlePageList(Page page);
+    IPage<ArticleBaseVO> defaultQueryArticlePageList(@Param("searchText") String searchText, Page page);
+
+    int associatedUpdateById(ArticleUpdateDTO articleUpdateDTO);
 }

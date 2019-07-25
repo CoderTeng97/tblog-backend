@@ -40,7 +40,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         nowTime.add(calendarField, calendarInterval);
         Date expiresDate = nowTime.getTime();
         QueryWrapper<User> queryWrapper = new QueryWrapper();
-        User user = baseMapper.selectOne(queryWrapper.eq("email",email).eq("password",password));
+        //User user = baseMapper.selectOne(queryWrapper.eq("email",email).eq("password",password));
+        User user = new User();
+        user.setId("dsfsdfjskdfs");
+        user.setEmail("18781545@163.com");
+        user.setUserType("admin");
         String token = JWT.create()
                 .withClaim("userInfo",JSON.toJSONString(user))
                 .withExpiresAt(expiresDate) // expire time

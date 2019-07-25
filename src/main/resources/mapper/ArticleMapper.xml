@@ -31,6 +31,45 @@
     <select id="defaultQueryArticlePageList"  resultType="com.tg.blog.core.pojo.vo.ArticleBaseVO">
         SELECT
         <include refid="ArticleBaseVO_Column_List"></include>
-        FROM  tb_article ORDER  BY  gmt_create DESC
+        FROM  tb_article
+        <if test="searchText != null">
+            <where>
+                LOCATE(#{searchText}, `title`)>0 AND
+                LOCATE(#{searchText}, `classification`)>0 AND
+                LOCATE(#{searchText}, `description`)>0 AND
+                LOCATE(#{searchText}, `label`)>0
+            </where>
+        </if>
+        ORDER  BY  gmt_create DESC
     </select>
+    
+    
+    <update id="associatedUpdateById" parameterType="com.tg.blog.core.pojo.dto.ArticleUpdateDTO">
+        UPDATE tb_article a INNER  JOIN  tb_article_content ac
+        a.content_id = ac.id
+        <set>
+            <if test="title != null">
+                a.title = #{title}
+            </if>
+            <if test="description != null">
+                a.description = #{description}
+            </if>
+            <if test="label != null">
+                a.label = #{label}
+            </if>
+            <if test="classification != null">
+                a.classification = #{classification}
+            </if>
+            <if test="picUrl != null">
+                a.picUrl = #{picUrl}
+            </if>
+            <if test="content != null">
+                ac.content = #{content}
+            </if>
+        </set>
+        <where>
+            a.id =#{id}
+        </where>
+
+    </update>
 </mapper>

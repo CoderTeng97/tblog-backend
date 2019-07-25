@@ -1,8 +1,10 @@
 package com.tg.blog.core.service;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.tg.blog.core.model.Article;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.tg.blog.core.pojo.dto.ArticleUpdateDTO;
 import com.tg.blog.core.pojo.vo.ArticleBaseVO;
 
 /**
@@ -30,6 +32,14 @@ public interface ArticleService extends IService<Article> {
     * @Param: [pageNum, PageSize]
     * @return: com.baomidou.mybatisplus.core.metadata.IPage<com.tg.blog.core.pojo.vo.ArticleBaseVO>
     */ 
-    IPage<ArticleBaseVO> getActiclePageList(Long pageNum,Long PageSize);
+    IPage<ArticleBaseVO> getActiclePageList(Long pageNum,Long PageSize,String searchText);
+
+
+    /**
+     * 关联更新文章信息
+     * @param articleUpdateDTO
+     * @return
+     */
+    boolean associatedUpdateArticle(ArticleUpdateDTO articleUpdateDTO);
 
 }
