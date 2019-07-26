@@ -14,4 +14,6 @@ public class UserBaseVO {
     private String username;
 
     private String email;
+
+    private String userType;
 }

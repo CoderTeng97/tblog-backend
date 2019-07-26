@@ -2,8 +2,7 @@ package com.tg.blog.security.config;
 
 
 import com.tg.blog.security.filter.CustomCorsFilter;
-import com.tg.blog.security.filter.TokenAuthenticationFilter;
-import org.springframework.beans.factory.annotation.Value;
+import com.tg.blog.security.filter.UserAuthenticationFilter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -35,10 +34,10 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // 禁用缓存
         httpSecurity.headers().cacheControl();
         //校验Token
-        httpSecurity.addFilterBefore(new TokenAuthenticationFilter(),
+        httpSecurity.addFilterBefore(new UserAuthenticationFilter(),
                 UsernamePasswordAuthenticationFilter.class);
         // 添加CORS过滤器
-        httpSecurity.addFilterAfter(new CustomCorsFilter(), TokenAuthenticationFilter.class);
+        httpSecurity.addFilterAfter(new CustomCorsFilter(), UserAuthenticationFilter.class);
     }
 
     @Override

@@ -7,7 +7,8 @@ package com.tg.blog.base.enums;
  */
 public enum ResponseMsgType {
     OK("操作成功！"),
-    FAIL("亲,操作失败啦~");
+    FAIL("亲,操作失败啦~"),
+    EMAIL_ERROR("亲,邮箱格式错误");
 
     private String msg;
 

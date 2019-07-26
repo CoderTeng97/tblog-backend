@@ -6,11 +6,20 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.RSAKeyProvider;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.tg.blog.base.exception.ResponseCommonException;
+import com.tg.blog.base.exception.TokenException;
+import com.tg.blog.base.utils.TokenUtils;
 import com.tg.blog.core.model.User;
 import com.tg.blog.core.mapper.UserMapper;
+import com.tg.blog.core.pojo.dto.LoginInfoDTO;
+import com.tg.blog.core.pojo.vo.UserBaseVO;
 import com.tg.blog.core.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import javassist.NotFoundException;
+import net.sf.jsqlparser.parser.TokenMgrException;
 import org.apache.commons.codec.digest.Md5Crypt;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
@@ -27,32 +36,17 @@ import java.util.*;
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
-    /** 秘钥 */
-    public static final String SECRET = "JKKLJOoasdlfj";
-    /** token 过期时间*/
-    public static final int calendarField = Calendar.DATE;
-    public static final int calendarInterval = 10;
+
 
 
     @Override
-    public Map<String, Object> login(String email, String password) {
-        Calendar nowTime = Calendar.getInstance();
-        nowTime.add(calendarField, calendarInterval);
-        Date expiresDate = nowTime.getTime();
-        QueryWrapper<User> queryWrapper = new QueryWrapper();
-        //User user = baseMapper.selectOne(queryWrapper.eq("email",email).eq("password",password));
-        User user = new User();
-        user.setId("dsfsdfjskdfs");
-        user.setEmail("18781545@163.com");
-        user.setUserType("admin");
-        String token = JWT.create()
-                .withClaim("userInfo",JSON.toJSONString(user))
-                .withExpiresAt(expiresDate) // expire time
-                .sign(Algorithm.HMAC256(SECRET)); // signature
-        Map<String,Object> result = new HashMap<>();
-        result.put("token",token);
-        result.put("username",user.getUsername());
-        result.put("userType",user.getUserType());
-        return result;
+    public Optional<Map<String,Object>> login(String email , String password){
+        UserBaseVO user = baseMapper.selectUserByLoginInfo(email,password);
+        if (user == null){return null;}
+        Optional token = TokenUtils.generateUserToken(user);
+        Map<String,Object> map = new HashMap<>();
+        map.put("token",token.get());
+        map.put("user",user);
+        return Optional.of(map);
     }
 }

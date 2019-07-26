@@ -2,6 +2,9 @@ package com.tg.blog.core.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tg.blog.base.controller.BaseController;
+import com.tg.blog.base.enums.ResponseMsgType;
+import com.tg.blog.base.exception.ResponseCommonException;
+import com.tg.blog.base.utils.VerifyDataUtil;
 import com.tg.blog.core.model.User;
 import com.tg.blog.core.pojo.dto.LoginInfoDTO;
 import com.tg.blog.core.pojo.dto.UserRegistoryDTO;
@@ -14,34 +17,41 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @Api(description = "用户管理")
 @RestController
 @RequestMapping("/user")
-public class UserController extends BaseController{
+public class UserController extends BaseController {
     @Autowired
     UserService userService;
 
     @ApiOperation("用户登录")
     @PostMapping("/login")
-    public Object login(String email,String password){
-        return  userService.login(email,password);
+    public Object login(String email, String password) {
+        if (VerifyDataUtil.isEmail(email)) {
+            responseFail(ResponseMsgType.EMAIL_ERROR);
+        }
+        return userService.login(email, password).orElseThrow(() -> {
+            throw new ResponseCommonException("用户名或密码不存在");
+        });
     }
 
     @ApiOperation("用户注册")
     @PostMapping("/registry")
-    public Object registry(UserRegistoryDTO userRegistoryDTO){
+    public Object registry(UserRegistoryDTO userRegistoryDTO) {
         return responseOk();
     }
 
     @ApiOperation("用户邮箱是否存在")
     @GetMapping("/isExistEmail")
-    public Boolean isExistEmail(String email){
+    public Boolean isExistEmail(String email) {
         Boolean isExist = false;
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        int count = userService.count(queryWrapper.eq("email",email));
-        if (count > 0 ){
-            isExist= true;
+        int count = userService.count(queryWrapper.eq("email", email));
+        if (count > 0) {
+            isExist = true;
         }
-        return  isExist;
+        return isExist;
     }
 }

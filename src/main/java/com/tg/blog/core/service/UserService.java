@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * <p>
@@ -15,5 +16,5 @@ import java.util.Map;
  * @since 2019-07-16
  */
 public interface UserService extends IService<User> {
-    public Map<String,Object> login(String email , String password);
+    public Optional<Map<String,Object>> login(String email , String password);
 }
