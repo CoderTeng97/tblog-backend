@@ -16,4 +16,16 @@ public class UserBaseVO {
     private String email;
 
     private String userType;
+
+    public UserBaseVO() {
+    }
+
+    public UserBaseVO(String id, String username, String email, String userType) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.userType = userType;
+    }
+
+
 }

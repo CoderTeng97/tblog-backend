@@ -54,7 +54,7 @@ public class TokenUtils {
      * @return
      * @throws Exception
      */
-    public static Object getCliamByName(String secret,String token, String name) throws Exception {
+    public static Object getCliamByName(String token, String name) throws Exception {
         try {
             return Optional.ofNullable(JSONObject
                     .parse(JWT.decode(token)
