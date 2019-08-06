@@ -1,12 +1,9 @@
 package com.tg.blog.security.filter;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.interfaces.DecodedJWT;
+
 import com.tg.blog.base.exception.ResponseCommonException;
 import com.tg.blog.base.utils.TokenUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -15,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
-import java.util.concurrent.CompletionException;
 
 public class UserAuthenticationFilter extends OncePerRequestFilter{
 
@@ -23,10 +19,15 @@ public class UserAuthenticationFilter extends OncePerRequestFilter{
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         /**用户凭证检查*/
-        Optional<String> token =Optional.of(httpServletRequest.getHeader("token"));
-        token.orElseThrow(
-                ()->{ throw  new ResponseCommonException(HttpStatus.FORBIDDEN,"无效的登录凭证,请登录后重试!");}
-        );
+        Optional<String> token =Optional.ofNullable(httpServletRequest.getHeader("token"));
+        try {
+            token.orElseThrow(
+                    ()->{ throw  new ResponseCommonException(HttpStatus.FORBIDDEN,"无效的登录凭证,请登录后重试!");}
+            );
+        }catch (Throwable throwable){
+            throw  new RuntimeException(throwable);
+        }
+
         try {
            boolean isExpired =  TokenUtils.isExpired(token.get());
            if (isExpired){

@@ -2,6 +2,7 @@ package com.tg.blog.security.config;
 
 
 import com.tg.blog.security.filter.CustomCorsFilter;
+import com.tg.blog.security.filter.ExceptionHandlerFilter;
 import com.tg.blog.security.filter.UserAuthenticationFilter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -33,11 +34,13 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 禁用缓存
         httpSecurity.headers().cacheControl();
+        httpSecurity.addFilterBefore(new ExceptionHandlerFilter(),UsernamePasswordAuthenticationFilter.class);
         //校验Token
         httpSecurity.addFilterBefore(new UserAuthenticationFilter(),
                 UsernamePasswordAuthenticationFilter.class);
         // 添加CORS过滤器
         httpSecurity.addFilterAfter(new CustomCorsFilter(), UserAuthenticationFilter.class);
+
     }
 
     @Override
@@ -55,7 +58,17 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/**/*.html",
                 "/**/*.css",
                 "/**/*.js");
-        //放行认证到controller
-        web.ignoring().antMatchers(HttpMethod.POST,"/user/login");
+        //放行认证到controller TODO 后期可扩展到配置系统 String[]（或者写一个open controller） 每个开发接口做访问权限控制，设置频繁访问限制
+        web.ignoring().antMatchers(HttpMethod.POST,
+                "/user/login",
+                "/user/registry"
+                );
+
+        web.ignoring().antMatchers(HttpMethod.GET,
+                "/user/isExistUserName",
+                "/user/isExistEmail"
+        );
+
+
     }
 }

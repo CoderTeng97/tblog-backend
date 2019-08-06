@@ -12,10 +12,7 @@ import com.tg.blog.core.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -28,10 +25,11 @@ public class UserController extends BaseController {
 
     @ApiOperation("用户登录")
     @PostMapping("/login")
-    public Object login(String email, String password) {
-        if (VerifyDataUtil.isEmail(email)) {
+    public Object login(String email, String password) throws Throwable{
+        if (VerifyDataUtil.email(email)) {
             responseFail(ResponseMsgType.EMAIL_ERROR);
         }
+
         return userService.login(email, password).orElseThrow(() -> {
             throw new ResponseCommonException("用户名或密码不存在");
         });
@@ -39,19 +37,29 @@ public class UserController extends BaseController {
 
     @ApiOperation("用户注册")
     @PostMapping("/registry")
-    public Object registry(UserRegistoryDTO userRegistoryDTO) {
+    public Object registry(@RequestBody UserRegistoryDTO userRegistoryDTO) {
+        boolean isRegistry = userService.registery(userRegistoryDTO);
+        if (false == isRegistry){
+            responseFail("亲,注册失败啦,请稍后重试沃~");
+        }
         return responseOk();
     }
 
     @ApiOperation("用户邮箱是否存在")
     @GetMapping("/isExistEmail")
     public Boolean isExistEmail(String email) {
-        Boolean isExist = false;
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         int count = userService.count(queryWrapper.eq("email", email));
-        if (count > 0) {
-            isExist = true;
-        }
+        Boolean isExist = count > 0 ? true : false ;
+        return isExist;
+    }
+
+    @ApiOperation("用户名是否存在")
+    @GetMapping("/isExistUserName")
+    public Boolean isExistUserName(String username) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        int count = userService.count(queryWrapper.eq("username", username));
+        Boolean isExist = count > 0 ? true : false ;
         return isExist;
     }
 }

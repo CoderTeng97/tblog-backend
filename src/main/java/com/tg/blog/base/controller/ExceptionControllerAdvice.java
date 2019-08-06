@@ -26,6 +26,11 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler
     public void processExceptions(HttpServletRequest request, HttpServletResponse response, Exception e){
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("application/json; charset=utf-8");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Headers", "X-Requested-With,content-type,token");
+        response.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH");
         if( e instanceof ResponseCommonException){
             info.put("code",((ResponseCommonException) e).getHttpStatus().value());
             info.put("msg",e.getMessage());

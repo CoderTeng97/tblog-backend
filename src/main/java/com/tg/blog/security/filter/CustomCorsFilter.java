@@ -26,13 +26,14 @@ public class CustomCorsFilter extends CorsFilter {
         config.setAllowedMethods(Arrays.asList("GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
-        return source;
         //CORS
 //        httpServletResponse.addHeader("Access-Control-Allow-Origin", "*");
 //        if (httpServletRequest.getHeader("Access-Control-Request-Method") != null && "OPTIONS".equalsIgnoreCase(httpServletRequest.getMethod())) {
 //            httpServletResponse.addHeader("Access-Control-Allow-Headers", "Authorization");
 //            httpServletResponse.addHeader("Access-Control-Allow-Headers", "Content-Type");
 //            httpServletResponse.addHeader("Access-Control-Max-Age", "1");
-//            httpServletResponse.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+//            httpServletResponse.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");}
+        return source;
+
     }
 }
