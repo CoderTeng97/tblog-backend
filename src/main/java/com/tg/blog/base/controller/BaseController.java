@@ -1,11 +1,10 @@
 package com.tg.blog.base.controller;
 
-import com.auth0.jwt.JWT;
+
 import com.tg.blog.base.annotation.ControllerExceptionProcessor;
 import com.tg.blog.base.enums.ResponseMsgType;
 import com.tg.blog.base.exception.ResponseCommonException;
 import com.tg.blog.base.utils.TokenUtils;
-import com.tg.blog.core.model.User;
 import com.tg.blog.core.pojo.vo.UserBaseVO;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -66,7 +65,9 @@ public abstract class BaseController {
         }
         ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         try {
-            return (UserBaseVO) TokenUtils.getCliamByName(attrs.getRequest().getHeader("token"),"user");
+            String token = attrs.getRequest().getHeader("token");
+            UserBaseVO userBaseVO =  (UserBaseVO) TokenUtils.getCliamByName(token,"user",UserBaseVO.class);
+            return userBaseVO;
         } catch (Exception e) {
             throw new RuntimeException("BaseController -> Token获取用户信息获取失败",e);
         }

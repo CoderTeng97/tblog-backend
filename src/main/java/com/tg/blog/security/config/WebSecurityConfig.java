@@ -2,7 +2,6 @@ package com.tg.blog.security.config;
 
 
 import com.tg.blog.security.filter.CustomCorsFilter;
-import com.tg.blog.security.filter.ExceptionHandlerFilter;
 import com.tg.blog.security.filter.UserAuthenticationFilter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -34,7 +33,6 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 禁用缓存
         httpSecurity.headers().cacheControl();
-        httpSecurity.addFilterBefore(new ExceptionHandlerFilter(),UsernamePasswordAuthenticationFilter.class);
         //校验Token
         httpSecurity.addFilterBefore(new UserAuthenticationFilter(),
                 UsernamePasswordAuthenticationFilter.class);

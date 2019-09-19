@@ -1,32 +1,20 @@
 package com.tg.blog.core.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.RSAKeyProvider;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tg.blog.base.exception.ResponseCommonException;
-import com.tg.blog.base.exception.TokenException;
 import com.tg.blog.base.utils.EncryptUtil;
 import com.tg.blog.base.utils.TokenUtils;
 import com.tg.blog.core.model.User;
 import com.tg.blog.core.mapper.UserMapper;
-import com.tg.blog.core.pojo.dto.LoginInfoDTO;
 import com.tg.blog.core.pojo.dto.UserRegistoryDTO;
 import com.tg.blog.core.pojo.vo.UserBaseVO;
 import com.tg.blog.core.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import javassist.NotFoundException;
-import net.sf.jsqlparser.parser.TokenMgrException;
-import org.apache.commons.codec.digest.Md5Crypt;
-import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
 import java.util.*;
 
 
@@ -63,6 +51,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public boolean registery(UserRegistoryDTO registoryDTO) {
+        /**校验用户邮箱验证码*/
+
         /**校验用户是否已经存在*/
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username",registoryDTO.getUsername()).or().eq("email",registoryDTO.getEmail());

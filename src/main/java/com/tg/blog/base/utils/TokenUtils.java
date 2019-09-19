@@ -19,13 +19,14 @@ import java.util.UUID;
  * This is used to generate kind of token and decode it.
  */
 public class TokenUtils {
-    private final static String secret ;
-    private final static long expires ;
+    private final static String secret;
+    private final static long expires;
 
     static {
         secret = Optional.ofNullable(System.getProperty("security.token.secret")).orElse(UUID.randomUUID().toString());
-        expires =Long.valueOf(Optional.ofNullable(System.getProperty("security.token.expires")).orElse("1"));
+        expires = Long.valueOf(Optional.ofNullable(System.getProperty("security.token.expires")).orElse("1"));
     }
+
     /**
      * 生成用户token
      *
@@ -54,11 +55,12 @@ public class TokenUtils {
      * @return
      * @throws Exception
      */
-    public static Object getCliamByName(String token, String name) throws Exception {
+    public static Object getCliamByName(String token, String name,Class retrunClazz) throws Exception {
         try {
-            return Optional.ofNullable(JSONObject
-                    .parse(JWT.decode(token)
-                            .getClaim(name).asString()));
+            String jsonStr = JWT.decode(token)
+                    .getClaim(name).asString();
+            Object obj = JSONObject.parseObject(jsonStr,retrunClazz);
+            return obj;
         } catch (Exception e) {
             throw new TokenException("Token 获取失败", e);
         }
@@ -70,7 +72,7 @@ public class TokenUtils {
      * @param token
      * @return
      */
-    public static  boolean isExpired(String token) {
+    public static boolean isExpired(String token) {
         try {
             JWT.require(Algorithm.HMAC256(secret));
             Date date = JWT.decode(token).getExpiresAt();

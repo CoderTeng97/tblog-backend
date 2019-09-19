@@ -18,11 +18,13 @@ public class AliYunOSSController extends BaseController{
     @Autowired
     AliYunOSService aliYunOSService;
 
+    private static final String OSSFolderName = "userFile";
+
     @GetMapping("/wpolicy")
     @ApiOperation("获取读写签名")
     public Object getWritePolicy() throws UnsupportedEncodingException {
         /**生成用户dir*/
-        JSONObject result =  aliYunOSService.getWritePolicy("userArticleCover/userid");
+        JSONObject result =  aliYunOSService.getWritePolicy(OSSFolderName + "/" +getUserInfo().getId());
         return  result;
     }
 }

@@ -12,6 +12,7 @@ import com.tg.blog.core.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -25,13 +26,12 @@ public class UserController extends BaseController {
 
     @ApiOperation("用户登录")
     @PostMapping("/login")
-    public Object login(String email, String password) throws Throwable{
-        if (VerifyDataUtil.email(email)) {
-            responseFail(ResponseMsgType.EMAIL_ERROR);
+    public Object login(@RequestBody UserRegistoryDTO registoryDTO) throws Throwable{
+        if (StringUtils.isEmpty(registoryDTO.getEmail()) && StringUtils.isEmpty(registoryDTO.getPassword()) ){
+            throw new ResponseCommonException("登录参数不能为空");
         }
-
-        return userService.login(email, password).orElseThrow(() -> {
-            throw new ResponseCommonException("用户名或密码不存在");
+        return userService.login(registoryDTO.getEmail(), registoryDTO.getPassword()).orElseThrow(() -> {
+            throw new ResponseCommonException("用户名或密码错误");
         });
     }
 

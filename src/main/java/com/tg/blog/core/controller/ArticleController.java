@@ -3,7 +3,6 @@ package com.tg.blog.core.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.tg.blog.base.annotation.ControllerExceptionProcessor;
 import com.tg.blog.base.controller.BaseController;
 import com.tg.blog.base.enums.ResponseMsgType;
 import com.tg.blog.core.model.Article;
@@ -16,7 +15,6 @@ import com.tg.blog.core.service.ArticleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -24,8 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.sql.Wrapper;
 
 /**
  * @Author: TengGang

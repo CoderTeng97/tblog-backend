@@ -23,6 +23,7 @@ public class ResponseCommonException extends  RuntimeException{
         super(msg);
         this.httpStatus = httpStatus;
     }
+    
 
     public HttpStatus getHttpStatus() {
         return httpStatus;
